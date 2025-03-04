@@ -21,12 +21,8 @@ reddit = praw.Reddit(
 # Discord Webhook URL from .env
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
-# Send a test message to confirm the bot is running
-test_message = {"content": "✅ Bot has been redeployed and is now running!"}
-requests.post(DISCORD_WEBHOOK_URL, json=test_message)
-
 # Subreddit to monitor
-subreddit_name = ["hiphopheads"]  # Change this to your target subreddit
+subreddit_name = ["hiphopheads", "askreddit"]  # Change this to your target subreddit
 subreddit = reddit.subreddit("+".join(subreddit_name))
 
 print(f"Listening for new posts in r/{subreddit.display_name}...")
@@ -35,14 +31,7 @@ print(f"Listening for new posts in r/{subreddit.display_name}...")
 def start_bot():
     """Function to stream new posts and send them to Discord."""
     for submission in subreddit.stream.submissions(skip_existing=True):
-         reddit_post_link = f"https://www.reddit.com{submission.permalink}"
-    
-    if submission.is_self:
-        # If it's a text post, just send the Reddit link
-        post_message = f"**New Post in r/{subreddit_name}!** \n\n**{submission.title}**\n🔗 [View Post]({reddit_post_link}) | 👍 {submission.score} upvotes"
-    else:
-        # If it's a link post, show both Reddit and external link
-        post_message = f"**New Post in r/{subreddit_name}!** \n\n**{submission.title}**\n🔗 [View on Reddit]({reddit_post_link})\n🔗 [External Link]({submission.url}) | 👍 {submission.score} upvotes"
+        post_message = f"🚨 **New Post in r/{subreddit_name}!** 🚨\n\n**{submission.title}**\n🔗 [View Post]({submission.url}) | 👍 {submission.score} upvotes"
 
         # Send message to Discord
         payload = {"content": post_message}
