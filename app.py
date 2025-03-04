@@ -21,6 +21,10 @@ reddit = praw.Reddit(
 # Discord Webhook URL from .env
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
+# Send a test message to confirm the bot is running
+test_message = {"content": "✅ Bot has been redeployed and is now running!"}
+requests.post(DISCORD_WEBHOOK_URL, json=test_message)
+
 # Subreddit to monitor
 subreddit_name = ["hiphopheads"]  # Change this to your target subreddit
 subreddit = reddit.subreddit("+".join(subreddit_name))
