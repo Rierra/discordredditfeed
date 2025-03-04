@@ -31,7 +31,14 @@ print(f"Listening for new posts in r/{subreddit.display_name}...")
 def start_bot():
     """Function to stream new posts and send them to Discord."""
     for submission in subreddit.stream.submissions(skip_existing=True):
-        post_message = f"🚨 **New Post in r/{subreddit_name}!** 🚨\n\n**{submission.title}**\n🔗 [View Post]({submission.url}) | 👍 {submission.score} upvotes"
+         reddit_post_link = f"https://www.reddit.com{submission.permalink}"
+    
+    if submission.is_self:
+        # If it's a text post, just send the Reddit link
+        post_message = f"**New Post in r/{subreddit_name}!** \n\n**{submission.title}**\n🔗 [View Post]({reddit_post_link}) | 👍 {submission.score} upvotes"
+    else:
+        # If it's a link post, show both Reddit and external link
+        post_message = f"**New Post in r/{subreddit_name}!** \n\n**{submission.title}**\n🔗 [View on Reddit]({reddit_post_link})\n🔗 [External Link]({submission.url}) | 👍 {submission.score} upvotes"
 
         # Send message to Discord
         payload = {"content": post_message}
