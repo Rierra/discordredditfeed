@@ -1,5 +1,6 @@
 praw
-discord.py
 python-dotenv
 requests
+uvicorn
+fastapi
 
