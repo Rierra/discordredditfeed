@@ -22,7 +22,7 @@ reddit = praw.Reddit(
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 # Subreddit to monitor
-subreddit_name = ["hiphopheads", "askreddit"]  # Change this to your target subreddit
+subreddit_name = ["hiphopheads", "worldnews"]  # Change this to your target subreddit
 subreddit = reddit.subreddit("+".join(subreddit_name))
 
 print(f"Listening for new posts in r/{subreddit.display_name}...")
