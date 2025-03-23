@@ -57,4 +57,7 @@ threading.Thread(target=start_bot, daemon=True).start()
 def home():
     """Home route to check if the bot is running."""
     return {"status": "Bot is running!"}
-
+    
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
