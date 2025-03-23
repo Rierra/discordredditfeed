@@ -31,7 +31,14 @@ print(f"Listening for new posts in r/{subreddit.display_name}...")
 def start_bot():
     """Function to stream new posts and send them to Discord."""
     for submission in subreddit.stream.submissions(skip_existing=True):
-        post_message = f"🚨 **New Post in r/{subreddit_name}!** 🚨\n\n**{submission.title}**\n🔗 [View Post]({submission.url}) | 👍 {submission.score} upvotes"
+        # Create the full Reddit URL by adding the permalink to the Reddit domain
+        reddit_post_url = f"https://www.reddit.com{submission.permalink}"
+        
+        post_message = f"🚨 **New Post in r/{submission.subreddit.display_name}!** 🚨\n\n**{submission.title}**\n🔗 [View Post]({reddit_post_url}) | 👍 {submission.score} upvotes"
+
+        # If it's a link post, you can also include the external link
+        if submission.is_self is False:  # This checks if it's a link post
+            post_message += f"\n📌 [External Link]({submission.url})"
 
         # Send message to Discord
         payload = {"content": post_message}
@@ -42,7 +49,6 @@ def start_bot():
         else:
             print(f"Failed to send: {response.text}")
 
-
 # Run the bot in a separate thread
 threading.Thread(target=start_bot, daemon=True).start()
 
@@ -51,3 +57,4 @@ threading.Thread(target=start_bot, daemon=True).start()
 def home():
     """Home route to check if the bot is running."""
     return {"status": "Bot is running!"}
+
