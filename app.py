@@ -2,6 +2,7 @@ import praw
 import os
 import requests
 import threading
+import time  # Add this import at the top
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
@@ -22,7 +23,7 @@ reddit = praw.Reddit(
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 # Subreddit to monitor
-subreddit_name = ["hiphopheads"]  # Change this to your target subreddit
+subreddit_name = ["hiphopheads", "worldnews"]
 subreddit = reddit.subreddit("+".join(subreddit_name))
 
 print(f"Listening for new posts in r/{subreddit.display_name}...")
@@ -49,14 +50,31 @@ def start_bot():
         else:
             print(f"Failed to send: {response.text}")
 
+
+def keep_alive():
+    """Periodically ping our own endpoint to prevent Render from sleeping"""
+    while True:
+        try:
+            # Replace this URL with your actual Render URL
+            requests.get("https://discordredditfeed.onrender.com")
+            print("Pinged self to stay awake")
+        except Exception as e:
+            print(f"Self-ping failed: {e}")
+        time.sleep(840)  # 14 minutes
+
+
 # Run the bot in a separate thread
 threading.Thread(target=start_bot, daemon=True).start()
+
+# Add the keep-alive thread
+threading.Thread(target=keep_alive, daemon=True).start()
 
 
 @app.get("/")
 def home():
     """Home route to check if the bot is running."""
     return {"status": "Bot is running!"}
+
 
 if __name__ == "__main__":
     import uvicorn
