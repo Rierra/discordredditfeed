@@ -26,7 +26,7 @@ WEBHOOK_CONFIGS = [
         "webhook_url": os.getenv("DISCORD_WEBHOOK_URL_1")
     },
     {
-        "subreddits": ["conspiracy"],
+        "subreddits": ["conspiracy", "askreddit"],
         "webhook_url": os.getenv("DISCORD_WEBHOOK_URL_2")
     }
 ]
