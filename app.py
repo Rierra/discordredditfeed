@@ -37,7 +37,7 @@ def process_submission(submission, webhook_url):
     reddit_post_url = f"https://www.reddit.com{submission.permalink}"
     
     # Start building the message
-    post_message = f"🚨 **New Post in r/{submission.subreddit.display_name}!** 🚨\n\n**{submission.title}**\n🔗 [View Post]({reddit_post_url}) | 👍 {submission.score} upvotes"
+      post_message = f"🚨 New Post in r/{submission.subreddit.display_name}! 🚨\n\n{submission.title}\n👤 OP: u/{submission.author.name}\n🔗 [View Post]({reddit_post_url}) | 👍 {submission.score} upvotes"
 
     # Handle text posts (self posts)
     if submission.is_self:
